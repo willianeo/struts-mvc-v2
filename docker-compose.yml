@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  tomcat:
+    build: .
+    container_name: tomcat6-app
+    ports:
+      - "8080:8080"
+    volumes:
+      # - ./target:/usr/local/tomcat6/webapps
+      - ./target/struts-mvc-v2.war:/usr/local/tomcat6/webapps/struts-mvc-v2.war
+    environment:
+      - JAVA_HOME=/usr/local/java6
+      - PATH=/usr/local/java6/bin:$PATH
+
