@@ -7,9 +7,37 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      # - ./target:/usr/local/tomcat6/webapps
       - ./target/struts-mvc-v2.war:/usr/local/tomcat6/webapps/struts-mvc-v2.war
     environment:
       - JAVA_HOME=/usr/local/java6
       - PATH=/usr/local/java6/bin:$PATH
+      - DB_HOST=mysql  # nome do serviço
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=toor
+      - DB_NAME=demodb
+    depends_on:
+      - mysql
+    networks:
+      - app-network  # Adicionando tomcat à mesma rede do MySQL
+      
+  mysql:
+    image: mysql:5.7  # usando imagem oficial do Mysql
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: demodb
+    ports:
+      - "3306:3306"  # mapeando porta para 3306
+    volumes:
+      - mysql-data:/var/lib/mysql  # persistência de dados entre reinicializações
+    networks:
+      - app-network
+
+volumes:
+  mysql-data:
+
+networks:
+  app-network:
+    driver: bridge
 
